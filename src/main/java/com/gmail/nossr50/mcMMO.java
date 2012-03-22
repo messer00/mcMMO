@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -55,8 +56,11 @@ public class mcMMO extends JavaPlugin {
 
     //Alias - Command
     public HashMap<String, String> aliasMap = new HashMap<String, String>();
+
+    //Various trackers
     public HashMap<Entity, Integer> arrowTracker = new HashMap<Entity, Integer>();
     public HashMap<Integer, Player> tntTracker = new HashMap<Integer, Player>();
+    public HashSet<Entity> projectileTracker = new HashSet<Entity>();
 
     public static Database database = null;
 
