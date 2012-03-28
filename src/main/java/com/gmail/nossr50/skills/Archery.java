@@ -84,6 +84,46 @@ public class Archery {
             }
         }
     }
+public static void bowCriticalCheck(Player attacker, EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Wolf) {
+            Wolf wolf = (Wolf) entity;
+
+            if (wolf.isTamed()) {
+                AnimalTamer tamer = wolf.getOwner();
+
+                if (tamer instanceof Player) {
+                    Player owner = (Player) tamer;
+
+                    if (owner == attacker || Party.getInstance().inSameParty(attacker, owner)) {
+                        return;
+                    }
+                }
+            }
+        }
+        final int MAX_BONUS_LEVEL = 750;
+        final double PVP_MODIFIER = 1.5;
+        final int PVE_MODIFIER = 2;
+
+        PlayerProfile PPa = Users.getProfile(attacker);
+        int skillLevel = PPa.getSkillLevel(SkillType.ARCHERY);
+        int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
+
+        if (random.nextInt(2000) <= skillCheck && !entity.isDead()){
+            int damage = event.getDamage();
+
+            if (entity instanceof Player){
+                event.setDamage((int) (damage * PVP_MODIFIER));
+                Player player = (Player) entity;
+                player.sendMessage(mcLocale.getString("Axes.HitCritically"));
+            }
+            else {
+                event.setDamage(damage * PVE_MODIFIER);
+            }
+            attacker.sendMessage(mcLocale.getString("Axes.CriticalHit"));
+        }
+    }
 
     /**
      * Check for Daze.
