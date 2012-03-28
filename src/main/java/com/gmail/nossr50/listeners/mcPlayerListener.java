@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -369,6 +370,13 @@ public class mcPlayerListener implements Listener {
                 return;
             }
             event.getPlayer().chat(message.replaceFirst(command, plugin.aliasMap.get(command)));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerEggThrow(PlayerEggThrowEvent event) {
+        if (event.getEgg().hasMetadata("mcmmoFiredFromStaff") && event.isHatching()) {
+            event.setHatching(false);
         }
     }
 }

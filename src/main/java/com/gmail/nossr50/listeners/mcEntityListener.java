@@ -1,6 +1,5 @@
 package com.gmail.nossr50.listeners;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,7 +20,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.gmail.nossr50.Combat;
@@ -165,21 +163,10 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.LOW)
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason().equals(SpawnReason.SPAWNER) && !LoadProperties.xpGainsMobSpawners) {
             event.getEntity().setMetadata("mcmmoFromMobSpawner", new FixedMetadataValue(plugin, true));
-        }
-        else if (event.getSpawnReason().equals(SpawnReason.EGG)) {
-            Location eLoc = event.getLocation();
-
-            for (Entity projectile : plugin.projectileTracker) {
-                Location pLoc = projectile.getLocation();
-
-                if (pLoc.getX() == eLoc.getX() && pLoc.getY() == eLoc.getY() && pLoc.getZ() == eLoc.getZ()) {
-                        event.setCancelled(true);
-                }
-            }
         }
     }
 
@@ -324,19 +311,6 @@ public class mcEntityListener implements Listener {
 
             PP.addXP(SkillType.TAMING, xp, player);
             Skills.XpCheckSkill(SkillType.TAMING, player);
-        }
-    }
-
-    /**
-     * Monitor ProjectileHit events.
-     *
-     * @param event The event to watch
-     */
-    @EventHandler (priority = EventPriority.MONITOR)
-    public void onProjectileHit(ProjectileHitEvent event) {
-        Entity projectile = event.getEntity();
-        if (plugin.projectileTracker.contains(projectile)) {
-            plugin.projectileTracker.remove(projectile);
         }
     }
 }
