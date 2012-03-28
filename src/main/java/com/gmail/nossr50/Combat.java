@@ -195,6 +195,7 @@ public class Combat {
             if (mcPermissions.getInstance().archery(attacker) && damage > 0) {
                 if (mcPermissions.getInstance().trackArrows(attacker)) {
                     Archery.trackArrows(pluginx, target, PPa);
+                    Archery.criticalCheck(attacker, event);
                 }
 
                 if (mcPermissions.getInstance().ignition(attacker)) {
